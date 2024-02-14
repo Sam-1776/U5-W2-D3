@@ -2,6 +2,10 @@ package samuelesimeone.eserciziou5w2d4.services;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import samuelesimeone.eserciziou5w2d4.dao.AutoriDAO;
 import samuelesimeone.eserciziou5w2d4.entities.Autore;
@@ -20,8 +24,9 @@ public class AutoriService {
     @Autowired
     AutoriDAO autoriDAO;
 
-    public List<Autore> getAll(){
-        return autoriDAO.findAll();
+    public Page<Autore> getAll(int pageN, int pageS, String OrderBy){
+        Pageable pageable = PageRequest.of(pageN, pageS, Sort.by(OrderBy));
+        return autoriDAO.findAll(pageable);
     }
 
 

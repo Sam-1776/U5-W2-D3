@@ -2,6 +2,7 @@ package samuelesimeone.eserciziou5w2d4.controllers;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import samuelesimeone.eserciziou5w2d4.entities.BlogPost;
@@ -19,8 +20,10 @@ public class BlogPostController {
     BlogPostService blogPostService;
 
     @GetMapping
-    public List<BlogPost> getAll(){
-        return this.blogPostService.getAll();
+    public Page<BlogPost> getAll(@RequestParam(defaultValue = "0") int page,
+                                 @RequestParam(defaultValue = "10") int size,
+                                 @RequestParam(defaultValue = "id") String order){
+        return this.blogPostService.getAll(page,size,order);
     }
 
     @GetMapping("/{id}")
@@ -35,7 +38,7 @@ public class BlogPostController {
     }
 
     @PutMapping("/{id}")
-    public BlogPost update(@PathVariable UUID id, @RequestBody BlogPost post){
+    public BlogPost update(@PathVariable UUID id, @RequestBody BlogPostPayload post){
         return this.blogPostService.update(id,post);
     }
 

@@ -2,6 +2,10 @@ package samuelesimeone.eserciziou5w2d4.services;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import samuelesimeone.eserciziou5w2d4.dao.AutoriDAO;
 import samuelesimeone.eserciziou5w2d4.dao.BlogPostDAO;
@@ -21,8 +25,9 @@ public class BlogPostService {
     @Autowired
     AutoriService autoriService;
 
-    public List<BlogPost> getAll(){
-        return blogPostDAO.findAll();
+    public Page<BlogPost> getAll(int pageN, int pageS, String OrderBY){
+        Pageable pageable = PageRequest.of(pageN, pageS, Sort.by(OrderBY));
+        return blogPostDAO.findAll(pageable);
     }
 
     public BlogPost save(BlogPostPayload post){
@@ -37,7 +42,7 @@ public class BlogPostService {
        return blogPostDAO.findById(id).orElseThrow(() -> new NotFoundException(id));
     }
 
-    public BlogPost update(UUID id, BlogPost postUp){
+    public BlogPost update(UUID id, BlogPostPayload postUp){
         postUp.setCover("https://picsum.photos/" + rdm.nextInt(100, 200) + "/" + rdm.nextInt(200, 300));
         postUp.setTempoDiLettura(rdm.nextDouble(1.0, 60.0));
         BlogPost found = this.findById(id);
@@ -46,6 +51,7 @@ public class BlogPostService {
         found.setTitolo(postUp.getTitolo());
         found.setCover(postUp.getCover());
         found.setTempoDiLettura(postUp.getTempoDiLettura());
+        found.setAutore(found.getAutore());
         return blogPostDAO.save(found);
     }
 

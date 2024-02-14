@@ -2,6 +2,7 @@ package samuelesimeone.eserciziou5w2d4.controllers;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import samuelesimeone.eserciziou5w2d4.entities.Autore;
@@ -18,8 +19,10 @@ public class AutoriController {
     AutoriService autoriService;
 
     @GetMapping
-    public List<Autore> getAll(){
-        return this.autoriService.getAll();
+    public Page<Autore> getAll(@RequestParam(defaultValue = "0") int page,
+                               @RequestParam(defaultValue = "10") int size,
+                               @RequestParam(defaultValue = "id") String order){
+        return this.autoriService.getAll(page, size, order);
     }
 
     @GetMapping("/{id}")
